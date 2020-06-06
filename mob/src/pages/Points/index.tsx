@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather as Icon } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import MapView, { Marker } from 'react-native-maps';
@@ -8,8 +8,7 @@ import { SvgUri } from 'react-native-svg';
 import { ScrollView } from 'react-native-gesture-handler';
 import useItems from '../../common/hooks/useItems'
 import * as Location from 'expo-location';
-import usePoints, {ColectPoint} from '../../common/hooks/usePoints';
-import api from '../../services/api';
+import getPoints, {ColectPoint} from '../../common/functions/getPoints';
 
 const styles = StyleSheet.create({
   container: {
@@ -113,10 +112,15 @@ export interface Item {
   name: string;
   image_url: string;
 }
+interface Params {
+  uf: string;
+  city: string;
+}
 
 const Points = () => {
   const navigation = useNavigation();
-  
+  const route = useRoute();
+  const routeParams = route.params as Params;
   const handleNavigateBack = () => {
     navigation.goBack();
   }
@@ -137,12 +141,18 @@ const Points = () => {
         setSelectedItems([ ...selectedItems, id]);
     }
   }
-  const filters = useMemo(() => ({city:"Belo Horizonte", uf: "MG", items: selectedItems}), [selectedItems]);
+  const filters = useMemo(() => ({city: routeParams.city, uf: routeParams.uf, items: selectedItems}), [selectedItems]);
+  
   const items = useItems();
 
   useEffect(() => {
-    const data = usePoints(filters);
-    setPoints(data);
+
+    const load = async () => {
+      const data = await getPoints(filters);
+      setPoints(data);
+    }
+    load();
+    
   }, [filters])
   
 

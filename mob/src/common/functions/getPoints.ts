@@ -1,5 +1,4 @@
 import api from '../../services/api';
-import react, { useState, useEffect } from 'react';
 
 export interface ColectPoint {
     id: number;
@@ -15,11 +14,8 @@ interface Filters {
     items: number[];
 }
 
-const usePoints = (filters: Filters) => {
-    const [points, setPoints ] = useState<ColectPoint[]>([]);
+const getPoints = async (filters: Filters) => {
 
-    useEffect(()=> {
-        const load = async () => {
             const response = await api.get('points', {
                 params: {
                     city: filters.city,
@@ -27,11 +23,7 @@ const usePoints = (filters: Filters) => {
                     items: filters.items
                 }
             })
-            setPoints(response.data);
-        } 
-        load();
-    }, [filters]);
-    return points;
+    return response.data;
 }
 
-export default usePoints;
+export default getPoints;
