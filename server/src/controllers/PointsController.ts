@@ -58,7 +58,12 @@ class PointsController {
             return response.status(400).json({ message: 'Point not fround.' });
         }
 
-        return response.json({point, items});
+        const serializedPoint = {
+            ...point,
+            image_url: `http://192.168.0.126:3333/uploads/${point.image}`
+        }
+
+        return response.json({serializedPoint, items});
     }
     async index(request: Request, response: Response) {
         const { city, uf, items } = request.query;
@@ -73,8 +78,13 @@ class PointsController {
             .where('uf', String(uf))
             .distinct()
             .select('points.*');
+        
+        const serializedPoints = points.map(p => ({
+            ...p,
+            image_url: `http://192.168.0.126:3333/uploads/${p.image}`
+        }))
 
-        return response.json(points);
+        return response.json(serializedPoints);
     }
 }
 

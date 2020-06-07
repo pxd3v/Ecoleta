@@ -91,16 +91,15 @@ const Detail = () => {
     navigation.goBack();
   }
   const route = useRoute();
-  console.log(route.params)
   const routeParams = route.params as Params;
   const point = usePointData(routeParams.point_id);
   const handleWhatsapp = () => {
-    Linking.openURL(`whatsapp://send?phone=${point?.point.whatsapp}&text=Tenho interesse sobre a coleta de resíduos`)
+    Linking.openURL(`whatsapp://send?phone=${point?.serializedPoint.whatsapp}&text=Tenho interesse sobre a coleta de resíduos`)
   }
   const handleComposeMail = () => {
     MailComposer.composeAsync({
       subject: 'Interesse na coleta de resíduos',
-      recipients: [point?.point.email ?? ''],
+      recipients: [point?.serializedPoint.email ?? ''],
     })
   }
   return (
@@ -109,12 +108,12 @@ const Detail = () => {
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-left" size={20} color="#34cb79" />
         </TouchableOpacity>
-        <Image style={styles.pointImage} source={{ uri: point?.point.image}}/>
-        <Text style={styles.pointName}>{point?.point.name}</Text>
+        <Image style={styles.pointImage} source={{ uri: point?.serializedPoint.image_url}}/>
+        <Text style={styles.pointName}>{point?.serializedPoint.name}</Text>
         <Text style={styles.pointItems}>{point?.items.map(i => i.title).join(', ')}</Text>
         <View style={styles.address}>
           <Text style={styles.addressTitle}>Endereço</Text>
-          <Text style={styles.addressContent}>{point?.point.city}, {point?.point.uf}</Text>
+          <Text style={styles.addressContent}>{point?.serializedPoint.city}, {point?.serializedPoint.uf}</Text>
         </View>
       </View>
 

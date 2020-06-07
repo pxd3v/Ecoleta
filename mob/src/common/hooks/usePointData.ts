@@ -2,8 +2,9 @@ import api from '../../services/api';
 import react, { useState, useEffect } from 'react';
 
 interface ColectPointData {
-    point: {
+    serializedPoint: {
         image: string;
+        image_url: string;
         name: string;
         email: string;
         whatsapp: string;

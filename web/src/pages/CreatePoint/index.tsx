@@ -8,9 +8,10 @@ import getActualCoords from '../../common/functions/getActualCoords'
 import { LeafletMouseEvent } from 'leaflet';
 import getCities from '../../common/functions/getCities';
 import createPoint from '../../common/functions/createPoint';
-import './styles.css'
-
 import logo from '../../assets/logo.svg'
+import Dropzone from '../../Components/Dropzone';
+
+import './styles.css';
 
 interface Coordinates {
     lat: number;
@@ -26,16 +27,17 @@ interface FormData {
 
 const CreatePoint: React.FC = () => {
     const [coordinates, setCoordinates] = useState<Coordinates>({lat: 0, lng: 0})
-
     const [selectedUf, setSelectedUf] = useState<string>("");
     const [selectedCity, setSelectedCity] = useState<string>("");
-    const [selectedItems, setSelectedItems] = useState<number[]>([]) 
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [formData, setFormData] = useState<FormData>({
         name: '',
         email: '',
         whatsapp: '',
-    })
+    });
     const [cities, setCities] = useState<string[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File>();
+
     const items = useItems();
     const ufs = useUfs();
     const history = useHistory();
@@ -78,6 +80,7 @@ const CreatePoint: React.FC = () => {
             setSelectedItems([ ...selectedItems, id]);
         }
     }
+
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
         const { name, email, whatsapp } = formData;
@@ -85,22 +88,23 @@ const CreatePoint: React.FC = () => {
         const city = selectedCity;
         const {lat, lng} = coordinates;
         const items = selectedItems;
-        const data = {
-            name,
-            email,
-            whatsapp,
-            uf,
-            city,
-            latitude: lat,
-            longitude: lng,
-            items,
-            image: "https://geo1.ggpht.com/cbk?panoid=GgzMk3aDHVBdHGwTEq2kPw&output=thumbnail&cb_client=search.gws-prod.gps&thumb=2&w=408&h=240&yaw=119.477165&pitch=0&thumbfov=100"
-        }
+
+        const data = new FormData();
+            data.append('name', name);
+            data.append('email', email);
+            data.append('whatsapp', whatsapp);
+            data.append('uf', uf);
+            data.append('city', city);
+            data.append('latitude', String(lat));
+            data.append('longitude', String(lng));
+            data.append('items', items.join(','));
+            if(selectedFile){
+                data.append('image', selectedFile);
+            }
         await createPoint(data);
         alert('Ponto de coleta criado!');
         history.push('/')
     }
-
 
     return (
         <div id="page-create-point">
@@ -118,6 +122,7 @@ const CreatePoint: React.FC = () => {
                     <legend>
                         <h2>Dados</h2>
                     </legend>
+                    <Dropzone onFileUploaded={setSelectedFile} />
                     <div className="field">
                         <label htmlFor="name">
                             Nome da entidade                            

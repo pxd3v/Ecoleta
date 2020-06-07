@@ -1,16 +1,6 @@
 import api from '../../services/api';
 
-interface ColectPoint {
-    name: string;
-    whatsapp: string;
-    latitude: number;
-    longitude: number;
-    items: number[];
-    city: string;
-    uf: string;
-    email: string;
-}
-const createPoint = async (data: ColectPoint) => {
+const createPoint = async (data: FormData) => {
     await api.post('points', data)
 }
 
