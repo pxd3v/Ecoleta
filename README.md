@@ -1,4 +1,4 @@
 # Eco
 My implementation for Next Level Week project Ecoleta!
 
-![]./home.jpeg
+![](/home.jpeg)
