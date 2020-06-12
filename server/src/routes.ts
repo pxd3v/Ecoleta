@@ -26,8 +26,8 @@ celebrate({
         latitude: Joi.number().required(),
         longitude: Joi.number().required(),
         items: Joi.string().required(),
-    })
-}),
-pointsController.create);
+    })}, {
+        abortEarly: false
+}), pointsController.create);
 
 export default routes;

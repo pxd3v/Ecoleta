@@ -24,8 +24,8 @@ interface FormData {
     whatsapp: '',
 }
 
-
 const CreatePoint: React.FC = () => {
+
     const [coordinates, setCoordinates] = useState<Coordinates>({lat: 0, lng: 0})
     const [selectedUf, setSelectedUf] = useState<string>("");
     const [selectedCity, setSelectedCity] = useState<string>("");
