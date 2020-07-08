@@ -11,7 +11,11 @@ const pointsController = new PointsController();
 const itemsController = new ItemsController();
 
 routes.get('/items', itemsController.index);
+
+
 routes.get('/points/:id', pointsController.show);
+
+
 routes.get('/points', pointsController.index);
 
 routes.post('/points',

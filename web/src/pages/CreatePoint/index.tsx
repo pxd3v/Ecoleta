@@ -54,16 +54,19 @@ const CreatePoint: React.FC = () => {
         const uf = event.target.value;
         setSelectedUf(uf);
     }
+    
     const handleSelectCity = (event: ChangeEvent<HTMLSelectElement>) => {
         const city = event.target.value;
         setSelectedCity(city);
     }
+
     const handleMapClick = (event: LeafletMouseEvent) => {
         setCoordinates({
             lat: event.latlng.lat,
             lng: event.latlng.lng
         })
     }
+
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData({
